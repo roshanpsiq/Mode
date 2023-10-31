@@ -4,93 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grouped Median Calculator</title>
+    <title>Mode Calculator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            margin: 0;
-            padding: 0;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
         }
 
         .container {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 400px;
-        }
-
-        input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 10px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 15px 32px;
             text-align: center;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        button:hover {
-            background-color: #45a049;
+        input, button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
         }
 
         #result {
-            font-size: 18px;
             margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 480px) {
-            input[type="text"], button {
-                font-size: 14px;
-            }
+            font-weight: bold;
         }
     </style>
-    <script>
-        function calculateGroupedMedian() {
-            // JavaScript function remains the same as before
-        }
-    </script>
 </head>
 
 <body>
     <div class="container">
-        <h1>Grouped Median Calculator</h1>
-        <label for="classes">Enter classes (e.g., 10-20, 21-30):</label>
-        <input type="text" id="classes" placeholder="Enter classes">
-        <label for="frequencies">Enter frequencies (comma-separated):</label>
-        <input type="text" id="frequencies" placeholder="Enter frequencies">
-        <button onclick="calculateGroupedMedian()">Calculate Median</button>
-        <p id="result"></p>
-        <div id="midpoint-table"></div>
+        <h1>Mode Calculator</h1>
+        <label for="numbers">Enter numbers (comma separated):</label>
+        <input type="text" id="numbers" placeholder="e.g., 1, 2, 3, 2, 4">
+        <button onclick="calculateMode()">Calculate Mode</button>
+        <div id="result"></div>
     </div>
+
+    <script>
+        function calculateMode() {
+            const inputElement = document.getElementById("numbers");
+            const numbers = inputElement.value.split(",").map(num => parseInt(num.trim()));
+
+            const numberCounts = {};
+            numbers.forEach(num => {
+                numberCounts[num] = (numberCounts[num] || 0) + 1;
+            });
+
+            let mode;
+            let maxCount = 0;
+            for (const num in numberCounts) {
+                if (numberCounts[num] > maxCount) {
+                    mode = num;
+                    maxCount = numberCounts[num];
+                }
+            }
+
+            const resultElement = document.getElementById("result");
+            if (mode) {
+                resultElement.textContent = `Mode: ${mode}, Occurs ${maxCount} times.`;
+            } else {
+                resultElement.textContent = "No mode found.";
+            }
+        }
+    </script>
 </body>
 
 </html>
