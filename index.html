@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grouped Median Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function calculateGroupedMedian() {
+            var classes = document.getElementById("classes").value.split(",");
+            var frequencies = document.getElementById("frequencies").value.split(",");
+
+            var midpoints = [];
+            var cumulativeFrequencies = [];
+            var totalFrequency = 0;
+
+            for (var i = 0; i < classes.length; i++) {
+                midpoints[i] = (parseFloat(classes[i].split("-")[0]) + parseFloat(classes[i].split("-")[1])) / 2;
+                totalFrequency += parseInt(frequencies[i]);
+                cumulativeFrequencies[i] = totalFrequency;
+            }
+
+            var medianClassIndex = -1;
+            for (var i = 0; i < cumulativeFrequencies.length; i++) {
+                if (cumulativeFrequencies[i] >= totalFrequency / 2) {
+                    medianClassIndex = i;
+                    break;
+                }
+            }
+
+            var lowerBound = parseFloat(classes[medianClassIndex].split("-")[0]);
+            var classWidth = parseFloat(classes[medianClassIndex].split("-")[1]) - parseFloat(classes[medianClassIndex].split("-")[0]);
+            var medianFrequency = parseInt(frequencies[medianClassIndex]);
+            var median = lowerBound + ((totalFrequency / 2 - cumulativeFrequencies[medianClassIndex - 1]) / medianFrequency) * classWidth;
+
+            document.getElementById("result").innerHTML = "Grouped Median: " + median.toFixed(2);
+
+            var table = "<br><br><h2>Mid-Point Distribution for Median</h2><table><tr><th>Class</th><th>Midpoint</th><th>Frequency</th></tr>";
+            for (var i = 0; i < classes.length; i++) {
+                table += "<tr><td>" + classes[i] + "</td><td>" + midpoints[i].toFixed(2) + "</td><td>" + frequencies[i] + "</td></tr>";
+            }
+            table += "</table>";
+            document.getElementById("midpoint-table").innerHTML = table;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Grouped Median Calculator</h1>
+        <label for="classes">Enter classes (e.g., 10-20, 21-30):</label>
+        <input type="text" id="classes" placeholder="Enter classes">
+        <label for="frequencies">Enter frequencies (comma-separated):</label>
+        <input type="text" id="frequencies" placeholder="Enter frequencies">
+        <button onclick="calculateGroupedMedian()">Calculate Median</button>
+        <p id="result"></p>
+        <div id="midpoint-table"></div>
+    </div>
+</body>
+
+</html>
